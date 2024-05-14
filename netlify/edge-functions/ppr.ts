@@ -13,7 +13,7 @@ export default async (request: Request, context: Context) => {
     const response = await context.next();
     return new HTMLRewriter()
     .on("*", {
-        async element(element) {
+        element(element) {
           const src = element.getAttribute("data-ppr");
           if (src) {
             const url = src.match(/^https?:/) ? src : new URL(src, request.url);
@@ -27,7 +27,7 @@ export default async (request: Request, context: Context) => {
         },
       })
       .on('body', {
-        element(element) {
+        async element(element) {
             element.onEndTag(async (tag) => {
                 for (const partial of partials) {
                     const resp = await partial.resp;
@@ -36,7 +36,8 @@ export default async (request: Request, context: Context) => {
                 }
             })
         }
-      }).transform(response);
+      })
+      .transform(response);
 }
 
 export const config: Config = {
