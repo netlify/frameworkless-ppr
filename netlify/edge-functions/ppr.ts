@@ -11,7 +11,7 @@ export default async (request: Request, context: Context) => {
     const partials : Partial[] = [];
 
     const response = await context.next();
-    return new HTMLRewriter()
+    const transformed = new HTMLRewriter()
     .on("*", {
         element(element) {
           const src = element.getAttribute("data-ppr");
@@ -38,6 +38,12 @@ export default async (request: Request, context: Context) => {
         }
       })
       .transform(response);
+
+    const cacheControl = transformed.headers.get("cache-control") || "";
+    
+    transformed.headers.set("cache-control", `${cacheControl},no-transform`);
+
+    return transformed;
 }
 
 export const config: Config = {
