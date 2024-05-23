@@ -2,6 +2,8 @@
 
 This is a tiny demo of Partial Prerendering with plain HTML, Netlify Functions and Edge Functions without any framework.
 
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/netlify/frameworkless-ppr)
+
 This in implemented by a small edge function [ppr.ts](netlify/edge-functions/ppr.ts) that uses the HTMLRewriter library to first let Netlify serve the normal HTML page, while triggering requests for dynamic content during the response stream and appending them at the end of the response with script tags that will insert them at the right location in the document.
 
 You can use the technique by adding tags with a `data-ppr` attribute:
